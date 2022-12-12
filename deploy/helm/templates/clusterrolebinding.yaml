@@ -1,0 +1,14 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  labels:
+    {{- include "kube-metrics-server-exporter.labels" . | nindent 4 }}
+  name: {{ include "kube-metrics-server-exporter.fullname" . }}
+roleRef:
+  kind: ClusterRole
+  name: {{ include "kube-metrics-server-exporter.fullname" . }}
+  apiGroup: rbac.authorization.k8s.io
+subjects:
+- kind: ServiceAccount
+  name: {{ include "kube-metrics-server-exporter.serviceAccountName" . }}
+  namespace: {{ .Release.Namespace }}

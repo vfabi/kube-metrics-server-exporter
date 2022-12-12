@@ -1,0 +1,13 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: {{ include "kube-metrics-server-exporter.fullname" . }}
+  labels:
+    {{- include "kube-metrics-server-exporter.labels" . | nindent 4 }}
+rules:
+- apiGroups: ["metrics.k8s.io"]
+  resources: ["*"]
+  verbs:
+    - list
+    - watch
+    - get

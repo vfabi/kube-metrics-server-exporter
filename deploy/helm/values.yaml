@@ -1,0 +1,63 @@
+global:
+  nameOverride: ""
+  fullnameOverride: ""
+  commonCustomLabels: {}
+
+
+controller:
+  replicaCount: 1
+  image:
+    repository: vfabi/kube-metrics-server-exporter
+    pullPolicy: IfNotPresent
+    tag: ""
+  imagePullSecrets: []
+  extraArgs: {}
+  env: {}
+    # K8S_ENDPOINT: ""
+    # NAMES_BLACKLIST: ""
+    # K8S_TOKEN: ""
+    # K8S_FILEPATH_TOKEN: ""
+    # K8S_CA_CERT_PATH: ""
+  ports:
+    - name: metrics
+      containerPort: 8000
+      protocol: TCP
+  livenessProbe:
+    httpGet:
+      path: /metrics
+      port: 8000
+      scheme: HTTP
+  readinessProbe:
+    httpGet:
+      path: /metrics
+      port: 8000
+      scheme: HTTP
+  resources:
+    requests:
+      cpu: 50m
+      memory: 64Mi
+    limits:
+      cpu: 100m
+      memory: 128Mi
+  podAnnotations: {}
+    # prometheus.io/scrape: "true"
+    # prometheus.io/port: "8000"
+  podSecurityContext: {}
+  securityContext: {}
+  nodeSelector: {}
+  tolerations: []
+  affinity: {}
+
+
+serviceaccount:
+  name: ""
+  annotations: {}
+
+
+service:
+  type: ClusterIP
+  ports:
+    - name: metrics
+      port: 8000
+      targetPort: metrics
+      protocol: TCP
